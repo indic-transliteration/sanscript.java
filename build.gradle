@@ -1,0 +1,103 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        //Needed only for SNAPSHOT versions
+        //maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+    dependencies {
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.22.0"
+    }
+}
+
+plugins {
+    id 'java-library'
+    id 'maven'
+    id 'signing'
+}
+apply plugin: 'io.codearte.nexus-staging'
+
+group 'com.github.sanskrit'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'sanscript_java'
+                packaging 'jar'
+                // optionally artifactId can be defined here 
+                description ''
+                url 'https://github.com/sanskrit/sanscript.java'
+
+                scm {
+                    connection 'scm:git:https://github.com/sanskrit/sanscript.java'
+                    developerConnection 'scm:git:https://github.com/sanskrit/sanscript.java'
+                    url 'https://github.com/sanskrit/sanscript.java'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'vvasuki'
+                        name 'Vishvas Vasuki'
+                        email 'vishvas.vasuki+maven@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+apply plugin: 'io.codearte.nexus-staging'
+nexusStaging {
+    packageGroup = "com.github.sanskrit" //optional if packageGroup == project.getGroup()
+//    stagingProfileId = "yourStagingProfileId" //when not defined will be got from server using "packageGroup"
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+
