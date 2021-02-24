@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+<modelVersion>4.0.0</modelVersion>
+<packaging>jar</packaging>
+<version>1.1</version>
+<description>
+    Sanscript is a transliteration library for Indian languages written in Java. It supports the most popular Indian scripts and several different romanization schemes. Although Sanscript focuses on Sanskrit transliteration, it has partial support for other languages and is easy to extend.
+</description>
+<name>Sanscript java</name>
+<issueManagement>
+    <url>https://github.com/sanskrit/sanscript.java/issues</url>
+    <system>GitHub Issues</system>
+</issueManagement>
+<url>https://github.com/sanskrit/sanscript.java-1</url>
+
+<licenses>
+    <license>
+        <name>Apache License 2.0</name>
+        <url>https://raw.githubusercontent.com/sanskrit/sanscript.java/master/LICENSE</url>
+        <distribution>repo</distribution>
+    </license>
+</licenses>
+
+<scm>
+    <url>https://github.com/sanskrit/sanscript.java</url>
+    <connection>scm:git:git://github.com/sanskrit/sanscript.java.git</connection>
+    <developerConnection>scm:git:git@github.com:sanskrit/sanscript.java.git</developerConnection>
+</scm>
+
+<developers>
+    <developer>
+        <email>sanskrit-programmers@googlegroups.com</email>
+        <name>Sanskrit coders</name>
+        <url>https://sanskrit-coders.github.io/</url>
+        <id>sanskrit</id>
+    </developer>
+</developers>
+
+<groupId>com.github.sanskrit</groupId>
+<artifactId>sanscript.java</artifactId>
+
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+</properties>
+
+<prerequisites>
+    <maven>3.5</maven>
+</prerequisites>
+
+<dependencies>
+    <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+
+
+<!-- For maven deployment -->
+<distributionManagement>
+    <snapshotRepository>
+        <id>ossrh</id>
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+</distributionManagement>
+
+<build>
+    <outputDirectory>${project.build.directory}/classes</outputDirectory>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.6.1</version>
+            <configuration>
+                <source>1.8</source>
+                <target>1.8</target>
+            </configuration>
+        </plugin>
+        <!-- For maven deployment -->
+        <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+                <serverId>ossrh</serverId>
+                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                <autoReleaseAfterClose>true</autoReleaseAfterClose>
+            </configuration>
+        </plugin>
+
+        <!-- For maven deployment.
+        getIndexFileEntry get Javadoc and Source jar files generated, you have to configure the javadoc and source Maven plugins.
+         -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.2.1</version>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <goals>
+                        <goal>jar-no-fork</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+        <!-- For maven deployment.
+         The Maven GPG plugin is used to sign the components with the following configuration.
+         It relies on the gpg command being installed and the GPG credentials being available e.g. from ~/.m2/settings.xml. In addition you can configure the gpg command in case it is different from gpg. This is a common scenario on some operating systems.
+         -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.5</version>
+            <executions>
+                <execution>
+                    <id>sign-artifacts</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>sign</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+        <!--Produce jar with dependencies.-->
+        <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+            <configuration>
+                <outputDirectory>bin/artifacts</outputDirectory>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+</project>
