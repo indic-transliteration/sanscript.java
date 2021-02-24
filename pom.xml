@@ -3,7 +3,7 @@
 
 <modelVersion>4.0.0</modelVersion>
 <packaging>jar</packaging>
-<version>1.1</version>
+<version>0.1</version>
 <description>
     Sanscript is a transliteration library for Indian languages written in Java. It supports the most popular Indian scripts and several different romanization schemes. Although Sanscript focuses on Sanskrit transliteration, it has partial support for other languages and is easy to extend.
 </description>
