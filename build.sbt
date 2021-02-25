@@ -5,6 +5,7 @@ scmInfo := Some(
   )
 )
 
+organization := "com.github.sanskrit"
 useGpg := true
 publishMavenStyle := true
 publishTo := Some(
